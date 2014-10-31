@@ -4,13 +4,29 @@
 
 package RestaurantGame;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class GameController {
 	private Player player;
 
 	private Restaurant restaurant;
 
-	public void startGame() {
+	public GameController() {
+		player = new Player();
+		restaurant = new Restaurant();
+	}
 
+	public void startGame() throws IOException {
+		System.out.println("Hello new player!");
+		System.out.println("Welcome to Restaurant Game!");
+		BufferedReader input = new BufferedReader(new InputStreamReader(
+				System.in));
+		System.out.print("What is your name: ");
+		String name = input.readLine();
+		player.setName(name);
+		
 	}
 
 	public void trainEmployee(Employee employee) {
@@ -50,7 +66,7 @@ public class GameController {
 		this.restaurant = restaurant;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		GameController gameController = new GameController();
 		gameController.startGame();
 	}
