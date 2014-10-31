@@ -4,6 +4,8 @@
 
 package RestaurantGame;
 
+import java.util.List;
+
 public class Restaurant {
 	private String name;
 
@@ -15,106 +17,116 @@ public class Restaurant {
 
 	private Integer reputation;
 
-	private Table table;
-
 	private Visit visit;
 
-	private Employee employee;
+	private java.util.List<Employee> employees;
 
-	public void paySuppliers( float amount ) {
+	private java.util.List<Table> tables;
 
-	}
+	private java.util.List<MenuItem> menu;
 
-	public void computeReputation( Boolean clientSatisfaction ) {
-
-	}
-
-	public void payUtilities( float amount ) {
+	public void paySuppliers(float amount) {
 
 	}
 
-	public void paySalaries( float amount ) {
+	public void computeReputation(Boolean clientSatisfaction) {
 
 	}
 
-	public void populateTables( ) {
+	public void payUtilities(float amount) {
 
 	}
 
-	public void computeClientStatistics( ) {
+	public void paySalaries(float amount) {
 
 	}
 
-	public void payTraining( float amount ) {
+	public void populateTables() {
 
 	}
 
-	public void processOrder( Dish dish, Beverage beverage, Table table ) {
+	public void computeClientStatistics() {
 
 	}
 
-	public String getName( ) {
+	public void payTraining(float amount) {
+
+	}
+
+	public void processOrder(Dish dish, Beverage beverage, Table table) {
+
+	}
+
+	public String getName() {
 		return name;
 	}
 
-	public String getCity( ) {
+	public String getCity() {
 		return city;
 	}
 
-	public String getAddress( ) {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setBudget( float budget ) {
+	public void setBudget(float budget) {
 		this.budget = budget;
 	}
 
-	public float getBudget( ) {
+	public float getBudget() {
 		return budget;
 	}
 
-	public Integer getReputation( ) {
+	public Integer getReputation() {
 		return reputation;
 	}
 
-	public void setTable( Table table ) {
-		this.table = table;
+	public void setTables(List<Table> tables) {
+		this.tables = tables;
 	}
 
-	public Table getTable( ) {
-		return table;
+	public List<Table> getTables() {
+		return tables;
 	}
 
-	public void setVisit( Visit visit ) {
+	public void setVisit(Visit visit) {
 		this.visit = visit;
 	}
 
-	public Visit getVisit( ) {
+	public Visit getVisit() {
 		return visit;
 	}
 
-	public void setEmployee( Employee employee ) {
-		this.employee = employee;
-	}
-
-	public Employee getEmployee( ) {
-		return employee;
-	}
-
-	public void setName( String name ) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setCity( String city ) {
+	public void setCity(String city) {
 		this.city = city;
 	}
 
-	public void setAddress( String address ) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
-	public void setReputation( Integer reputation ) {
+	public void setReputation(Integer reputation) {
 		this.reputation = reputation;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setMenu(java.util.List<MenuItem> menu) {
+		this.menu = menu;
+	}
+
+	public java.util.List<MenuItem> getMenu() {
+		return menu;
 	}
 
 }

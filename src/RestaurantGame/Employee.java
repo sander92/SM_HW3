@@ -15,43 +15,48 @@ public abstract class Employee {
 
 	private ExperienceLevel experienceLevel;
 
-	public void increaseExperience( ) {
+	public Employee(String name, String surname) {
+		this.name = name;
+		this.surname = surname;
+	}
+
+	public void increaseExperience() {
 
 	}
 
-	public void computeSalary( ) {
+	public void computeSalary() {
 
 	}
 
-	public String getName( ) {
+	public String getName() {
 		return name;
 	}
 
-	public String getSurname( ) {
+	public String getSurname() {
 		return surname;
 	}
 
-	public void setSalary( float salary ) {
+	public void setSalary(float salary) {
 		this.salary = salary;
 	}
 
-	public float getSalary( ) {
+	public float getSalary() {
 		return salary;
 	}
 
-	public void setExperienceLevel( ExperienceLevel experienceLevel ) {
+	public void setExperienceLevel(ExperienceLevel experienceLevel) {
 		this.experienceLevel = experienceLevel;
 	}
 
-	public ExperienceLevel getExperienceLevel( ) {
+	public ExperienceLevel getExperienceLevel() {
 		return experienceLevel;
 	}
 
-	public void setName( String name ) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setSurname( String surname ) {
+	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 
