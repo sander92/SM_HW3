@@ -4,6 +4,7 @@
 
 package RestaurantGame;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Restaurant {
@@ -129,4 +130,23 @@ public class Restaurant {
 		return menu;
 	}
 
+	public List<MenuItem> getDishes() {
+		List<MenuItem> items = new ArrayList<>();
+		for (MenuItem menuItem : menu) {
+			if (menuItem instanceof Dish) {
+				items.add(menuItem);
+			}
+		}
+		return items;
+	}
+
+	public List<MenuItem> getBeverages() {
+		List<MenuItem> items = new ArrayList<>();
+		for (MenuItem menuItem : menu) {
+			if (menuItem instanceof Beverage) {
+				items.add(menuItem);
+			}
+		}
+		return items;
+	}
 }

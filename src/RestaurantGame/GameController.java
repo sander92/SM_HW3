@@ -61,6 +61,8 @@ public class GameController {
 			System.out.println("Day " + day + ": Budget " + restaurant.getBudget());
 			initWaitersToTables(input);
 
+			simulateCustomers();
+
 			if (day % 7 == 0) {
 				List<MenuItem> menu = restaurant.getMenu();
 				float cost = 0;
@@ -81,6 +83,18 @@ public class GameController {
 		System.out.println("Final score: " + restaurant.getBudget());
 		scoreBoard.add(player);
 		System.out.println(scoreBoard);
+	}
+
+	private void simulateCustomers() {
+		List<MenuItem> beverages = restaurant.getBeverages();
+		MenuItem beverage1 = beverages.get(new Random().nextInt(beverages.size()));
+		MenuItem beverage2 = beverages.get(new Random().nextInt(beverages.size()));
+
+		List<MenuItem> dishes = restaurant.getDishes();
+		MenuItem dish1 = dishes.get(new Random().nextInt(dishes.size()));
+		MenuItem dish2 = dishes.get(new Random().nextInt(dishes.size()));
+
+		// TODO customer things
 	}
 
 	// TODO check kas on ok input
