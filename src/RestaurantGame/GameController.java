@@ -60,7 +60,7 @@ public class GameController {
 		// choose client
 		Random unusedRandom = new Random();
 		List<Integer> unUsedClients = new ArrayList<>();
-		for (int day = 1; day <= 30; day++) {
+		for (int day = 1; day <= 3; day++) {
 			System.out.println("Day " + day + ": Budget " + restaurant.getBudget() + ", Reputation: " + restaurant.getReputation());
 			initWaitersToTables(input);
 			sendToTraining(input);
@@ -71,7 +71,7 @@ public class GameController {
 			if (restaurant.getReputation() > 30) {
 				// TODO kas see on õige nii teha?
 				// või peaks mingit pidi siduma asjad omavahel kokku
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < 9; i++) {
 					Integer nextClientIdx1 = getNextClientIdx(unusedRandom, unUsedClients);
 					Integer nextClientIdx2 = getNextClientIdx(unusedRandom, unUsedClients);
 					simulateCustomers(restaurant.getTables().get(i), day, customersBank.get(nextClientIdx1), customersBank.get(nextClientIdx2));
@@ -114,6 +114,10 @@ public class GameController {
 		for (Customer customer : customersBank) {
 			System.out.println(customer.getName() + " " + customer.getSurname());
 			List<Visit> visits = customer.getVisits();
+			if (visits == null || visits.size() == 0) {
+				System.out.println("Never came over :(\n");
+				continue;
+			}
 			HashMap<MenuItem, Integer> itemsToCounts = new HashMap<>();
 			float moneySpent = 0;
 			for (Visit visit : visits) {
@@ -127,10 +131,14 @@ public class GameController {
 			for (MenuItem item : itemsToCounts.keySet()) {
 				if (item instanceof Dish) {
 					Dish d = (Dish) item;
-					calories.add(d.getCalorieCount());
+					for (int i = 0; i < itemsToCounts.get(item); i++) {
+						calories.add(d.getCalorieCount());
+					}
 				} else if (item instanceof Beverage) {
 					Beverage b = (Beverage) item;
-					volumes.add(b.getVolume());
+					for (int i = 0; i < itemsToCounts.get(item); i++) {
+						volumes.add(b.getVolume());
+					}
 				}
 				System.out.println(item + ": " + itemsToCounts.get(item) + " times");
 			}
@@ -170,6 +178,11 @@ public class GameController {
 	}
 
 	private void simulateCustomers(Table table, Integer day, Customer customer1, Customer customer2) {
+		// TODO kas see on loogiline, et kui waiterit laual ei ole, siis ei
+		// telli midagi...või peaks nt rep või satisfaction jmt ikka vähenema?
+		if (table.getWaiter() == null) {
+			return;
+		}
 		List<Beverage> beverages = restaurant.getMenuitemByType(Beverage.class);
 		Beverage b1 = beverages.get(new Random().nextInt(beverages.size()));
 		Beverage b2 = beverages.get(new Random().nextInt(beverages.size()));
@@ -296,12 +309,14 @@ public class GameController {
 	}
 
 	private void makeItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
+		Random volumeAndCalories = new Random();
 		for (int i = 0; i < nrOfItems; i++) {
 			Dish dish = new Dish();
 			dish.setName(namePrefix + "Dish " + i);
 			dish.setQualityLevel(isHighQuality ? QualityLevel.HIGH : QualityLevel.LOW);
 			dish.setPreparationCost(isHighQuality ? 10 : 3);
 			dish.setSellingPrice(cost);
+			dish.setCalorieCount(volumeAndCalories.nextInt(1000) / 10);
 			menu.add(dish);
 
 			Beverage bev = new Beverage();
@@ -309,6 +324,7 @@ public class GameController {
 			bev.setQualityLevel(isHighQuality ? QualityLevel.HIGH : QualityLevel.LOW);
 			bev.setPreparationCost(isHighQuality ? 3 : 1);
 			bev.setSellingPrice(cost);
+			bev.setVolume(volumeAndCalories.nextInt(1000) / 10);
 			menu.add(bev);
 		}
 	}
@@ -316,6 +332,9 @@ public class GameController {
 	private void initWaitersToTables(BufferedReader input) {
 		List<Employee> emp = restaurant.getEmployees();
 		List<Table> tables = restaurant.getTables();
+		for (Table table : tables) {
+			table.assignWaiter(null);
+		}
 		int start = 0;
 		for (Employee employee : emp) {
 			if (employee instanceof Waiter) {
