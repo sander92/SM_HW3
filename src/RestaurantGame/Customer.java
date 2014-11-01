@@ -4,6 +4,9 @@
 
 package RestaurantGame;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Customer {
 	private String name;
 
@@ -13,45 +16,48 @@ public class Customer {
 
 	private String taxCode;
 
-	private Visit visit;
+	private List<Visit> visits;
 
-	public String getName( ) {
+	public String getName() {
 		return name;
 	}
 
-	public String getSurname( ) {
+	public String getSurname() {
 		return surname;
 	}
 
-	public String getTelephoneNr( ) {
+	public String getTelephoneNr() {
 		return telephoneNr;
 	}
 
-	public String getTaxCode( ) {
+	public String getTaxCode() {
 		return taxCode;
 	}
 
-	public void setVisit( Visit visit ) {
-		this.visit = visit;
+	public void setVisits(List<Visit> visits) {
+		this.visits = visits;
 	}
 
-	public Visit getVisit( ) {
-		return visit;
+	public List<Visit> getVisits() {
+		if (visits == null) {
+			visits = new ArrayList<>();
+		}
+		return visits;
 	}
 
-	public void setName( String name ) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setSurname( String surname ) {
+	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 
-	public void setTelephoneNr( String telephoneNr ) {
+	public void setTelephoneNr(String telephoneNr) {
 		this.telephoneNr = telephoneNr;
 	}
 
-	public void setTaxCode( String taxCode ) {
+	public void setTaxCode(String taxCode) {
 		this.taxCode = taxCode;
 	}
 

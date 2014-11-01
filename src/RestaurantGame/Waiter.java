@@ -26,9 +26,4 @@ public class Waiter extends Employee {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "Waiter[name: " + getName() + " " + getSurname() + ",experienceLevel: " + getExperienceLevel() + "]";
-	}
-
 }

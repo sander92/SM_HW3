@@ -15,7 +15,7 @@ public class Table {
 	private Waiter waiter;
 
 	public void assignWaiter(Waiter waiter) {
-
+		this.waiter = waiter;
 	}
 
 	public void setNumber(int number) {
@@ -36,6 +36,6 @@ public class Table {
 
 	@Override
 	public String toString() {
-		return "Table "+number;
+		return "Table " + number;
 	}
 }

@@ -15,44 +15,35 @@ public abstract class MenuItem {
 
 	private float sellingPrice;
 
-	public void addToMenu( ) {
-
-	}
-
-	public void removeFromMenu( ) {
-
-	}
-
-	public String getName( ) {
+	public String getName() {
 		return name;
 	}
 
-	public void setQualityLevel( QualityLevel qualityLevel ) {
+	public void setQualityLevel(QualityLevel qualityLevel) {
 		this.qualityLevel = qualityLevel;
 	}
 
-	public QualityLevel getQualityLevel( ) {
+	public QualityLevel getQualityLevel() {
 		return qualityLevel;
 	}
 
-	public void setPreparationCost( float preparationCost ) {
+	public void setPreparationCost(float preparationCost) {
 		this.preparationCost = preparationCost;
 	}
 
-	public float getPreparationCost( ) {
+	public float getPreparationCost() {
 		return preparationCost;
 	}
 
-	public void setSellingPrice( float sellingPrice ) {
+	public void setSellingPrice(float sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 
-	public float getSellingPrice( ) {
+	public float getSellingPrice() {
 		return sellingPrice;
 	}
 
-	public void setName( String name ) {
+	public void setName(String name) {
 		this.name = name;
 	}
-
 }

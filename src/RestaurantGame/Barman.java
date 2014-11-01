@@ -12,5 +12,4 @@ public class Barman extends Employee {
 		setExperienceLevel(ExperienceLevel.LOW);
 	}
 
-
 }

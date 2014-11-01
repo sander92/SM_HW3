@@ -64,4 +64,8 @@ public abstract class Employee {
 		this.surname = surname;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[name: " + getName() + " " + getSurname() + ",experienceLevel: " + getExperienceLevel() + "]";
+	}
 }

@@ -18,13 +18,18 @@ public class Restaurant {
 
 	private Integer reputation;
 
-	private Visit visit;
+	private List<Visit> visits;
 
 	private java.util.List<Employee> employees;
 
 	private java.util.List<Table> tables;
 
 	private java.util.List<MenuItem> menu;
+
+	public Restaurant() {
+		setBudget(10_000);
+		setReputation(15);
+	}
 
 	public void paySuppliers(float amount) {
 
@@ -90,12 +95,12 @@ public class Restaurant {
 		return tables;
 	}
 
-	public void setVisit(Visit visit) {
-		this.visit = visit;
+	public void setVisits(List<Visit> visits) {
+		this.visits = visits;
 	}
 
-	public Visit getVisit() {
-		return visit;
+	public List<Visit> getVisits() {
+		return visits;
 	}
 
 	public void setName(String name) {
@@ -130,23 +135,24 @@ public class Restaurant {
 		return menu;
 	}
 
-	public List<MenuItem> getDishes() {
-		List<MenuItem> items = new ArrayList<>();
-		for (MenuItem menuItem : menu) {
-			if (menuItem instanceof Dish) {
-				items.add(menuItem);
+	public <T> List<T> getMenuitemByType(Class<T> clazz) {
+		List<T> lst = new ArrayList<T>();
+		for (MenuItem item : menu) {
+			if (item.getClass() == clazz) {
+				lst.add((T) item);
 			}
 		}
-		return items;
+		return lst;
 	}
 
-	public List<MenuItem> getBeverages() {
-		List<MenuItem> items = new ArrayList<>();
-		for (MenuItem menuItem : menu) {
-			if (menuItem instanceof Beverage) {
-				items.add(menuItem);
+	public <T> List<T> getEmployeeByType(Class<T> clazz) {
+		List<T> lst = new ArrayList<T>();
+		for (Employee employee : employees) {
+			if (employee.getClass() == clazz) {
+				lst.add((T) employee);
 			}
 		}
-		return items;
+		return lst;
 	}
+
 }
