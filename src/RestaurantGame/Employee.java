@@ -36,12 +36,16 @@ public abstract class Employee {
 		return surname;
 	}
 
-	public void setSalary(float salary) {
-		this.salary = salary;
-	}
-
 	public float getSalary() {
-		return salary;
+		switch (getExperienceLevel()) {
+		default:
+		case LOW:
+			return 300;
+		case MEDIUM:
+			return 400;
+		case HIGH:
+			return 500;
+		}
 	}
 
 	public void setExperienceLevel(ExperienceLevel experienceLevel) {

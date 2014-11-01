@@ -12,12 +12,7 @@ public class Chef extends Employee {
 	public Chef(String name, String surname, String taxCode) {
 		super(name, surname);
 		setExperienceLevel(ExperienceLevel.LOW);
-		setSalary(300);
 		setTaxCode(taxCode);
-	}
-
-	public void computeSalary() {
-
 	}
 
 	public String getTaxCode() {
@@ -25,7 +20,7 @@ public class Chef extends Employee {
 	}
 
 	public void setTaxCode(String taxCode) {
-
+		this.taxCode=taxCode;
 	}
 
 }
