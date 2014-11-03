@@ -4,8 +4,11 @@
 
 package RestaurantGame;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 public class Player {
-	private String name;
+	private String name = "";
 
 	private int score;
 
@@ -32,6 +35,19 @@ public class Player {
 	}
 
 	public void setName( String name ) {
+		this.name = name;
+	}
+
+	public void initPlayer(BufferedReader input) {
+		String name = "";
+		while (name == ""){
+			System.out.print("What is your name: ");	
+			try {
+				name = input.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+		}
 		this.name = name;
 	}
 

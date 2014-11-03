@@ -26,8 +26,6 @@ public class GameController {
 
 	private Restaurant restaurant;
 	private List<Customer> customersBank;
-	private Integer highNo;
-	private Integer lowNo;
 	private float runningSupplierBill;
 
 	public GameController() {
@@ -46,17 +44,15 @@ public class GameController {
 		System.out.println("Hello new player!");
 		System.out.println("Welcome to Restaurant Game!");
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("What is your name: ");
-		String name = input.readLine();
-		player.setName(name);
-
-		initRestaurant(input);
-		initEmployees();
-		initTables();
-		initMenuItems(input);
+		player.initPlayer(input);
+		restaurant.initRestaurant(input);
+		restaurant.initEmployees();
+		restaurant.initTables();
+		restaurant.initMenuItems(input);
 		initCustomerBank();
+		
+		
 		// TODO check kas on ok input
-
 		// choose client
 		Random unusedRandom = new Random();
 		List<Integer> unUsedClients = new ArrayList<>();
@@ -242,92 +238,6 @@ public class GameController {
 		return visit;
 	}
 
-	// TODO check kas on ok input
-	private void initMenuItems(BufferedReader input) throws IOException {
-		List<MenuItem> menu = null;
-		while (true) {
-			try {
-				System.out.print("What is nr of High quality menuitems: ");
-				// TODO need peaks panema restorani sisse vist
-				this.highNo = Integer.parseInt(input.readLine());
-
-				System.out.print("What is nr of Low quality menuitems: ");
-				this.lowNo = Integer.parseInt(input.readLine());
-
-				System.out.print("What is the cost of High quality menuitems: ");
-				float highCost = Integer.parseInt(input.readLine());
-
-				System.out.print("What is the cost of Low quality menuitems: ");
-				float lowCost = Integer.parseInt(input.readLine());
-
-				menu = new ArrayList<>();
-				makeItems(highCost, "High", highNo, menu, true);
-				makeItems(lowCost, "Low", lowNo, menu, false);
-				break;
-			} catch (Exception e) {
-				System.err.println("\nError");
-			}
-		}
-
-		restaurant.setMenu(menu);
-	}
-
-	private void initTables() {
-		List<Table> tables = new ArrayList<>();
-
-		for (int i = 1; i <= 9; i++) {
-			tables.add(new Table(i));
-		}
-		restaurant.setTables(tables);
-	}
-
-	private void initEmployees() {
-		List<Employee> employees = new ArrayList<>();
-		employees.add(new Waiter("Jim", "Parsons"));
-		employees.add(new Waiter("James", "Man"));
-		employees.add(new Waiter("Johnny", "Money"));
-
-		employees.add(new Chef("Icook", "Foods", "coooode"));
-		employees.add(new Barman("Bever", "Agemaker"));
-		restaurant.setEmployees(employees);
-	}
-
-	private void initRestaurant(BufferedReader input) throws IOException {
-		System.out.print("What is Restaurant's name: ");
-		String resName = input.readLine();
-		restaurant.setName(resName);
-
-		System.out.print("What is Restaurant's address: ");
-		String address = input.readLine();
-		restaurant.setAddress(address);
-
-		System.out.print("What is Restaurant's city: ");
-		String city = input.readLine();
-		restaurant.setCity(city);
-
-		restaurant.setVisits(new ArrayList<>());
-	}
-
-	private void makeItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
-		Random volumeAndCalories = new Random();
-		for (int i = 0; i < nrOfItems; i++) {
-			Dish dish = new Dish();
-			dish.setName(namePrefix + "Dish " + i);
-			dish.setQualityLevel(isHighQuality ? QualityLevel.HIGH : QualityLevel.LOW);
-			dish.setPreparationCost(isHighQuality ? 10 : 3);
-			dish.setSellingPrice(cost);
-			dish.setCalorieCount(volumeAndCalories.nextInt(1000) / 10);
-			menu.add(dish);
-
-			Beverage bev = new Beverage();
-			bev.setName(namePrefix + "Bev" + i);
-			bev.setQualityLevel(isHighQuality ? QualityLevel.HIGH : QualityLevel.LOW);
-			bev.setPreparationCost(isHighQuality ? 3 : 1);
-			bev.setSellingPrice(cost);
-			bev.setVolume(volumeAndCalories.nextInt(1000) / 10);
-			menu.add(bev);
-		}
-	}
 
 	private void initWaitersToTables(BufferedReader input) {
 		List<Employee> emp = restaurant.getEmployees();
@@ -420,11 +330,6 @@ public class GameController {
 
 	public void chooseName(String name) {
 
-	}
-
-	public void setDishesQuality(Integer highNo, Integer lowNo) {
-		this.highNo = highNo;
-		this.lowNo = lowNo;
 	}
 
 	public void setBeveragesQuality(Integer highNo, Integer lowNo) {
