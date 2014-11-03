@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,14 +19,21 @@ import util.CollectionUtil;
 import RestaurantGame.enums.ExperienceLevel;
 import RestaurantGame.enums.QualityLevel;
 
+@SuppressWarnings("unused")
 public class GameController {
 	private static PriorityQueue<Player> scoreBoard;
 	private Player player;
-
 	private Restaurant restaurant;
 	private List<Customer> customersBank;
+	
 	private float runningSupplierBill;
-
+	private Integer gameLength = 30; 
+	private Integer HighReputationTreshold = 30;
+	private Integer MediumReputationTreshold = 15;
+	private Integer HighReputationTablesOccupied = 9;
+	private Integer MediumReputationTablesOccupied = 5;
+	private Integer LowReputationTablesOccupied = 2;
+	
 	public GameController() {
 		player = new Player();
 		restaurant = new Restaurant();
@@ -51,61 +57,60 @@ public class GameController {
 		restaurant.initMenuItems(input);
 		initCustomerBank();
 		
-		
-		// TODO check kas on ok input
-		// choose client
-		Random unusedRandom = new Random();
+
+		Random unusedRandomGenerator = new Random();
 		List<Integer> unUsedClients = new ArrayList<>();
-		for (int day = 1; day <= 3; day++) {
-			System.out.println("Day " + day + ": Budget " + restaurant.getBudget() + ", Reputation: " + restaurant.getReputation());
+		for (int day = 1; day <= gameLength; day++) {
+			System.out.println("\nKDay " + day + ": Budget " + restaurant.getBudget() + ", Reputation: " + restaurant.getReputation());
 			initWaitersToTables(input);
 			sendToTraining(input);
 
 			for (int i = 0; i < 18; i++) {
 				unUsedClients.add(i);
 			}
-			if (restaurant.getReputation() > 30) {
-				// TODO kas see on õige nii teha?
-				// või peaks mingit pidi siduma asjad omavahel kokku
-				for (int i = 0; i < 9; i++) {
-					Integer nextClientIdx1 = getNextClientIdx(unusedRandom, unUsedClients);
-					Integer nextClientIdx2 = getNextClientIdx(unusedRandom, unUsedClients);
+			if (restaurant.getReputation() > HighReputationTreshold ) {
+				for (int i = 0; i < HighReputationTablesOccupied; i++) {
+					Integer nextClientIdx1 = getNextClientIdx(unusedRandomGenerator, unUsedClients);
+					Integer nextClientIdx2 = getNextClientIdx(unusedRandomGenerator, unUsedClients);
 					simulateCustomers(restaurant.getTables().get(i), day, customersBank.get(nextClientIdx1), customersBank.get(nextClientIdx2));
 				}
-			} else if (restaurant.getReputation() > 15) {
-				for (int i = 0; i < 5; i++) {
-					Integer nextClientIdx1 = getNextClientIdx(unusedRandom, unUsedClients);
-					Integer nextClientIdx2 = getNextClientIdx(unusedRandom, unUsedClients);
+			} else if (restaurant.getReputation() >  MediumReputationTreshold) {
+				for (int i = 0; i < MediumReputationTablesOccupied; i++) {
+					Integer nextClientIdx1 = getNextClientIdx(unusedRandomGenerator, unUsedClients);
+					Integer nextClientIdx2 = getNextClientIdx(unusedRandomGenerator, unUsedClients);
 					simulateCustomers(restaurant.getTables().get(i), day, customersBank.get(nextClientIdx1), customersBank.get(nextClientIdx2));
 				}
-			} else {
-				for (int i = 0; i < 2; i++) {
-					Integer nextClientIdx1 = getNextClientIdx(unusedRandom, unUsedClients);
-					Integer nextClientIdx2 = getNextClientIdx(unusedRandom, unUsedClients);
+			} else { // low reputation
+				for (int i = 0; i < LowReputationTablesOccupied; i++) {
+					Integer nextClientIdx1 = getNextClientIdx(unusedRandomGenerator, unUsedClients);
+					Integer nextClientIdx2 = getNextClientIdx(unusedRandomGenerator, unUsedClients);
 					simulateCustomers(restaurant.getTables().get(i), day, customersBank.get(nextClientIdx1), customersBank.get(nextClientIdx2));
 				}
 			}
 
 			if (day % 7 == 0) {
-				float nBudget = restaurant.getBudget() - runningSupplierBill;
-				runningSupplierBill = 0;
-				restaurant.setBudget(nBudget);
+				restaurant.paySuppliers(runningSupplierBill);
+				restaurant.paySalaries();
 			}
 
+			if (day % 30 == 0){
+				restaurant.payUtilities();
+			}
 			if (restaurant.getBudget() < 0) {
-				System.out.println("You ran out of money");
+				System.out.println("You ran out of money.");
 				break;
 			}
 		}
 
 		printCustomerStatistics();
-		restaurant.setBudget(restaurant.getBudget() - 4000);
 		System.out.println("Game over!");
 		System.out.println("Final score: " + restaurant.getBudget());
 		scoreBoard.add(player);
 		System.out.println(scoreBoard);
 	}
 
+	
+	
 	private void printCustomerStatistics() {
 		for (Customer customer : customersBank) {
 			System.out.println(customer.getName() + " " + customer.getSurname());
@@ -174,11 +179,15 @@ public class GameController {
 	}
 
 	private void simulateCustomers(Table table, Integer day, Customer customer1, Customer customer2) {
-		// TODO kas see on loogiline, et kui waiterit laual ei ole, siis ei
-		// telli midagi...või peaks nt rep või satisfaction jmt ikka vähenema?
-		if (table.getWaiter() == null) {
+
+		Integer newReputation = restaurant.getReputation();
+		
+		// If no waiter, reduce reputation
+		if (table.getWaiter() == null) {		
+			restaurant.setReputation(newReputation - 3);
 			return;
 		}
+		
 		List<Beverage> beverages = restaurant.getMenuitemByType(Beverage.class);
 		Beverage b1 = beverages.get(new Random().nextInt(beverages.size()));
 		Beverage b2 = beverages.get(new Random().nextInt(beverages.size()));
@@ -189,12 +198,9 @@ public class GameController {
 
 		runningSupplierBill += b1.getPreparationCost() + b2.getPreparationCost() + d1.getPreparationCost() + d2.getPreparationCost();
 
-		// TODO customer things
 		Visit visit1 = makeVisit(table, b1, d1, day);
 		Visit visit2 = makeVisit(table, b2, d2, day);
 
-		// TODO refactor ja feature envy välja viia, i.e. restorani asjad resto
-		// klassi jne
 		calcIsSatisfied(visit1);
 
 		customer1.getVisits().add(visit1);
@@ -274,8 +280,6 @@ public class GameController {
 				System.err.println("Insert proper nr please");
 				continue;
 			}
-			// TODO because if count !=3, then some table is
-			// not assigned a waiter
 			if (count > 3 || count < 0) {
 				System.out.println("0 to 3 tables please!");
 				continue;
@@ -287,8 +291,11 @@ public class GameController {
 
 	private void sendToTraining(BufferedReader input) {
 		List<Employee> employees = restaurant.getEmployees();
-		for (int i = 0; i < employees.size(); i++) {
-			System.out.println("Send " + employees.get(i) + " to training? (y/n)");
+		for (Employee employee : employees) {
+			if (employee.getExperienceLevel() == ExperienceLevel.HIGH){
+				continue;
+			}
+			System.out.println("Send " + employee + " to training? (y/n)");
 			String yesNo = "";
 			try {
 				yesNo = input.readLine();
@@ -296,11 +303,12 @@ public class GameController {
 				e.printStackTrace();
 			}
 			if ("y".equalsIgnoreCase(yesNo)) {
-				trainEmployee(employees.get(i));
+				trainEmployee(employee);
 			}
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public void trainEmployee(Employee employee) {
 		float cost = 1200;
 		if (employee instanceof Waiter) {
@@ -322,18 +330,6 @@ public class GameController {
 			break;
 		}
 		System.out.println(employee + " trained for €" + cost);
-	}
-
-	public void setPrice(float lowDishCost, float highDishCost, float lowBeverageCost, float highBeverageCost) {
-
-	}
-
-	public void chooseName(String name) {
-
-	}
-
-	public void setBeveragesQuality(Integer highNo, Integer lowNo) {
-
 	}
 
 	public Player getPlayer() {

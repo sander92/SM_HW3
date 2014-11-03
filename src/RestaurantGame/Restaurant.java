@@ -31,31 +31,44 @@ public class Restaurant {
 
 	private java.util.List<MenuItem> menu;
 
-	private int highQualityDishCost;
-	private int lowQualityDishCost;
-
 	private int highQualityDishNo;
 	private int lowQualityDishNo;
+	private float highQualityDishCost;
+	private float lowQualityDishCost;
 
+	private int highQualityBeverageNo;
+	private int lowQualityBeverageNo;
+	private float highQualityBeverageCost;
+	private float lowQualityBeverageCost;
+	
+	public int highQualityDishIngredientCost = 10;
+	public int lowQualityDishIngredientCost = 3;
+	public int highQualityBeverageIngredientCost = 3;
+	public int lowQualityBeverageIngredientCost = 1;
+	
+	private float utilitiesCost = 4000;
+	
 	public Restaurant() {
 		setBudget(10_000);
 		setReputation(15);
 	}
 
 	public void paySuppliers(float amount) {
-
+		this.budget = this.budget - amount;
 	}
 
 	public void computeReputation(Boolean clientSatisfaction) {
 
 	}
 
-	public void payUtilities(float amount) {
-
+	public void payUtilities() {
+		this.budget = this.budget - utilitiesCost;
 	}
 
-	public void paySalaries(float amount) {
-
+	public void paySalaries() {
+		for (Employee employee : employees){
+			this.budget = this.budget - employee.getSalary();
+		}
 	}
 
 	public void populateTables() {
@@ -216,12 +229,12 @@ public class Restaurant {
 	}
 	
 
-	// TODO check kas on ok input
+	
 	public void initMenuItems(BufferedReader input) throws IOException {
 		List<MenuItem> menu = null;
 		while (true) {
 			try {
-				
+				//TODO: possibly move to separate methods
 				int highQualityDishNo, lowQualityDishNo;
 				while(true){
 					System.out.print("What is nr of High quality dishes: ");
@@ -231,7 +244,7 @@ public class Restaurant {
 					lowQualityDishNo = Integer.parseInt(input.readLine());
 					
 					if (highQualityDishNo + lowQualityDishNo != 5){
-						System.out.print("Number of high and low quality dishes must add up to 5.");
+						System.out.println("Number of high and low quality dishes must add up to 5.");
 					}
 					else {
 						this.highQualityDishNo = highQualityDishNo;
@@ -249,7 +262,7 @@ public class Restaurant {
 					lowQualityDishCost = Integer.parseInt(input.readLine());
 					
 					if (highQualityDishCost <= 0 || lowQualityDishCost <= 0){
-						System.out.print("Dish cost must be positive.");
+						System.out.println("Dish cost must be positive.");
 					}
 					else {
 						this.highQualityDishCost = highQualityDishCost;
@@ -257,17 +270,51 @@ public class Restaurant {
 						break;
 					}
 				}
+
+				int highQualityBeverageNo, lowQualityBeverageNo;
+				while(true){
+					System.out.print("What is nr of High quality beverages: ");
+					highQualityBeverageNo = Integer.parseInt(input.readLine());
+
+					System.out.print("What is nr of Low quality beverages: ");
+					lowQualityBeverageNo = Integer.parseInt(input.readLine());
+					
+					if (highQualityBeverageNo + lowQualityBeverageNo != 5){
+						System.out.println("Number of high and low quality beverages must add up to 5.");
+					}
+					else {
+						this.highQualityBeverageNo = highQualityBeverageNo;
+						this.lowQualityBeverageNo = lowQualityBeverageNo;
+						break;
+					}
+				}
 				
-				//TODO: repeat for beverages
-				//TODO: possibly move to separate methods
+				int highQualityBeverageCost, lowQualityBeverageCost;
+				while(true){
+					System.out.print("What is the cost of High quality beverages: ");
+					highQualityBeverageCost = Integer.parseInt(input.readLine());
 
-
+					System.out.print("What is the cost of Low quality beverages: ");
+					lowQualityBeverageCost = Integer.parseInt(input.readLine());
+					
+					if (highQualityBeverageCost <= 0 || lowQualityBeverageCost <= 0){
+						System.out.println("Beverage cost must be positive.");
+					}
+					else {
+						this.highQualityBeverageCost = highQualityBeverageCost;
+						this.lowQualityBeverageCost = lowQualityBeverageCost;
+						break;
+					}
+				}
+							
 				menu = new ArrayList<>();
-				makeItems(highQualityDishCost, "High", highQualityDishNo, menu, true);
-				makeItems(lowQualityDishCost, "Low", lowQualityDishNo, menu, false);
+				makeDishItems(highQualityDishCost, "High", highQualityDishNo, menu, true);
+				makeDishItems(lowQualityDishCost, "Low", lowQualityDishNo, menu, false);
+				makeBeverageItems(highQualityBeverageCost, "High", highQualityBeverageNo, menu, true);
+				makeBeverageItems(lowQualityBeverageCost, "Low", lowQualityBeverageNo, menu, false);
 				break;
 			} catch (Exception e) {
-				System.err.println("\nError");
+				System.err.println("\nError when initialising menu items");
 			}
 		}
 
@@ -275,25 +322,30 @@ public class Restaurant {
 	}
 	
 	
-	//TODO: separate dish and beverage creation
-	private void makeItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
+	private void makeDishItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
 		Random volumeAndCalories = new Random();
 		for (int i = 0; i < nrOfItems; i++) {
 			Dish dish = new Dish();
 			dish.setName(namePrefix + "Dish " + i);
 			dish.setQualityLevel(isHighQuality ? QualityLevel.HIGH : QualityLevel.LOW);
-			dish.setPreparationCost(isHighQuality ? 10 : 3);
+			dish.setPreparationCost(isHighQuality ? highQualityDishIngredientCost : lowQualityDishIngredientCost);
 			dish.setSellingPrice(cost);
 			dish.setCalorieCount(volumeAndCalories.nextInt(1000) / 10);
 			menu.add(dish);
-
+		}
+	}
+	
+	private void makeBeverageItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
+		Random volumeAndCalories = new Random();
+		for (int i = 0; i < nrOfItems; i++) {
 			Beverage bev = new Beverage();
 			bev.setName(namePrefix + "Bev" + i);
 			bev.setQualityLevel(isHighQuality ? QualityLevel.HIGH : QualityLevel.LOW);
-			bev.setPreparationCost(isHighQuality ? 3 : 1);
+			bev.setPreparationCost(isHighQuality ? highQualityBeverageIngredientCost : lowQualityBeverageIngredientCost);
 			bev.setSellingPrice(cost);
 			bev.setVolume(volumeAndCalories.nextInt(1000) / 10);
 			menu.add(bev);
 		}
 	}
+
 }

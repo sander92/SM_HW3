@@ -11,8 +11,6 @@ public abstract class Employee {
 
 	private String surname;
 
-	private float salary;
-
 	private ExperienceLevel experienceLevel;
 
 	public Employee(String name, String surname) {
@@ -24,9 +22,6 @@ public abstract class Employee {
 
 	}
 
-	public void computeSalary() {
-
-	}
 
 	public String getName() {
 		return name;

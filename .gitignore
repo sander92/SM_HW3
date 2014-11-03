@@ -1,3 +1,4 @@
 /bin/
 /src - Copy
 *.bak
+.metadata
