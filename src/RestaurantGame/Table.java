@@ -6,7 +6,7 @@ package RestaurantGame;
 
 public class Table {
 
-	public Table(int i) {
+	public Table( int i ) {
 		number = i;
 	}
 
@@ -14,28 +14,28 @@ public class Table {
 
 	private Waiter waiter;
 
-	public void assignWaiter(Waiter waiter) {
+	public void assignWaiter( Waiter waiter ) {
 		this.waiter = waiter;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber( int number ) {
 		this.number = number;
 	}
 
-	public int getNumber() {
+	public int getNumber( ) {
 		return number;
 	}
 
-	public void setWaiter(Waiter waiter) {
+	public void setWaiter( Waiter waiter ) {
 		this.waiter = waiter;
 	}
 
-	public Waiter getWaiter() {
+	public Waiter getWaiter( ) {
 		return waiter;
 	}
 
 	@Override
-	public String toString() {
+	public String toString( ) {
 		return "Table " + number;
 	}
 }

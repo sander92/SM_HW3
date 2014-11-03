@@ -4,22 +4,20 @@
 
 package RestaurantGame;
 
-import java.io.BufferedReader;
+import util.CollectionUtil;
+import java.util.PriorityQueue;
+import java.util.Date;
+import java.util.Random;
+import java.util.HashMap;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
-
-import util.CollectionUtil;
-import RestaurantGame.enums.ExperienceLevel;
 import RestaurantGame.enums.QualityLevel;
+import java.util.List;
+import java.io.BufferedReader;
+import java.util.Comparator;
+import RestaurantGame.enums.ExperienceLevel;
 
-@SuppressWarnings("unused")
 public class GameController {
 	private static PriorityQueue<Player> scoreBoard;
 	private Player player;
@@ -34,7 +32,7 @@ public class GameController {
 	private Integer MediumReputationTablesOccupied = 5;
 	private Integer LowReputationTablesOccupied = 2;
 	
-	public GameController() {
+	public GameController( ) {
 		player = new Player();
 		restaurant = new Restaurant();
 		scoreBoard = new PriorityQueue<Player>(new Comparator<Player>() {
@@ -46,7 +44,7 @@ public class GameController {
 		});
 	}
 
-	public void startGame() throws IOException {
+	public void startGame( ) throws IOException {
 		System.out.println("Hello new player!");
 		System.out.println("Welcome to Restaurant Game!");
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -111,7 +109,7 @@ public class GameController {
 
 	
 	
-	private void printCustomerStatistics() {
+	private void printCustomerStatistics( ) {
 		for (Customer customer : customersBank) {
 			System.out.println(customer.getName() + " " + customer.getSurname());
 			List<Visit> visits = customer.getVisits();
@@ -150,7 +148,7 @@ public class GameController {
 		}
 	}
 
-	private void countItems(HashMap<MenuItem, Integer> itemsToCounts, MenuItem item) {
+	private void countItems( HashMap<MenuItem,Integer> itemsToCounts, MenuItem item ) {
 		if (itemsToCounts.containsKey(item)) {
 			itemsToCounts.put(item, itemsToCounts.get(item) + 1);
 		} else {
@@ -158,7 +156,7 @@ public class GameController {
 		}
 	}
 
-	private void initCustomerBank() {
+	private void initCustomerBank( ) {
 		customersBank = new ArrayList<>();
 		for (int i = 0; i < 18; i++) {
 			Customer c = new Customer();
@@ -171,14 +169,14 @@ public class GameController {
 		}
 	}
 
-	private Integer getNextClientIdx(Random unusedRandom, List<Integer> unUsedClients) {
+	private Integer getNextClientIdx( Random unusedRandom, List<Integer> unUsedClients ) {
 		int rnd = unusedRandom.nextInt(unUsedClients.size());
 		Integer nextIdx = unUsedClients.get(rnd);
 		unUsedClients.remove(rnd);
 		return nextIdx;
 	}
 
-	private void simulateCustomers(Table table, Integer day, Customer customer1, Customer customer2) {
+	private void simulateCustomers( Table table, Integer day, Customer customer1, Customer customer2 ) {
 
 		Integer newReputation = restaurant.getReputation();
 		
@@ -212,7 +210,7 @@ public class GameController {
 		restaurant.setBudget(budget);
 	}
 
-	private void calcIsSatisfied(Visit visit) {
+	private void calcIsSatisfied( Visit visit ) {
 		Integer reputation = restaurant.getReputation();
 		if (visit.isIsSatisfiedWithBeverage()) {
 			reputation += 1;
@@ -232,7 +230,7 @@ public class GameController {
 		restaurant.setReputation(reputation);
 	}
 
-	private Visit makeVisit(Table table, Beverage beverage1, Dish dish1, Integer day) {
+	private Visit makeVisit( Table table, Beverage beverage1, Dish dish1, Integer day ) {
 		Visit visit = new Visit();
 		visit.setBarman(restaurant.getEmployeeByType(Barman.class).get(0));
 		visit.setChef(restaurant.getEmployeeByType(Chef.class).get(0));
@@ -245,7 +243,7 @@ public class GameController {
 	}
 
 
-	private void initWaitersToTables(BufferedReader input) {
+	private void initWaitersToTables( BufferedReader input ) {
 		List<Employee> emp = restaurant.getEmployees();
 		List<Table> tables = restaurant.getTables();
 		for (Table table : tables) {
@@ -270,7 +268,7 @@ public class GameController {
 		}
 	}
 
-	private int getTableCountForWaiter(BufferedReader input, Employee employee) {
+	private int getTableCountForWaiter( BufferedReader input, Employee employee ) {
 		int count = 0;
 		while (true) {
 			System.out.print("How many tables for " + employee + ": ");
@@ -289,7 +287,7 @@ public class GameController {
 		return count;
 	}
 
-	private void sendToTraining(BufferedReader input) {
+	private void sendToTraining( BufferedReader input ) {
 		List<Employee> employees = restaurant.getEmployees();
 		for (Employee employee : employees) {
 			if (employee.getExperienceLevel() == ExperienceLevel.HIGH){
@@ -308,8 +306,7 @@ public class GameController {
 		}
 	}
 
-	@SuppressWarnings("incomplete-switch")
-	public void trainEmployee(Employee employee) {
+	public void trainEmployee( Employee employee ) {
 		float cost = 1200;
 		if (employee instanceof Waiter) {
 			cost = 800;
@@ -332,23 +329,23 @@ public class GameController {
 		System.out.println(employee + " trained for €" + cost);
 	}
 
-	public Player getPlayer() {
+	public Player getPlayer( ) {
 		return player;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer( Player player ) {
 		this.player = player;
 	}
 
-	public Restaurant getRestaurant() {
+	public Restaurant getRestaurant( ) {
 		return restaurant;
 	}
 
-	public void setRestaurant(Restaurant restaurant) {
+	public void setRestaurant( Restaurant restaurant ) {
 		this.restaurant = restaurant;
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main( String[] args ) throws IOException {
 		GameController gameController = new GameController();
 		gameController.startGame();
 	}

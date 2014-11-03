@@ -7,7 +7,7 @@ package RestaurantGame;
 import RestaurantGame.enums.ExperienceLevel;
 
 public class Barman extends Employee {
-	public Barman(String name, String surname) {
+	public Barman( String name, String surname ) {
 		super(name, surname);
 		setExperienceLevel(ExperienceLevel.LOW);
 	}

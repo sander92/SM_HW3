@@ -4,13 +4,12 @@
 
 package RestaurantGame;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import RestaurantGame.enums.QualityLevel;
 import java.util.List;
 import java.util.Random;
-
-import RestaurantGame.enums.QualityLevel;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.util.ArrayList;
 
 public class Restaurant {
 	private String name;
@@ -33,21 +32,21 @@ public class Restaurant {
 
 	private int highQualityDishNo;
 	private int lowQualityDishNo;
-	private float highQualityDishCost;
-	private float lowQualityDishCost;
+	private int highQualityDishCost;
+	private int lowQualityDishCost;
 
 	private int highQualityBeverageNo;
 	private int lowQualityBeverageNo;
 	private float highQualityBeverageCost;
 	private float lowQualityBeverageCost;
-	
+
 	public int highQualityDishIngredientCost = 10;
 	public int lowQualityDishIngredientCost = 3;
 	public int highQualityBeverageIngredientCost = 3;
 	public int lowQualityBeverageIngredientCost = 1;
-	
+
 	private float utilitiesCost = 4000;
-	
+
 	public Restaurant() {
 		setBudget(10_000);
 		setReputation(15);
@@ -57,34 +56,14 @@ public class Restaurant {
 		this.budget = this.budget - amount;
 	}
 
-	public void computeReputation(Boolean clientSatisfaction) {
-
-	}
-
 	public void payUtilities() {
 		this.budget = this.budget - utilitiesCost;
 	}
 
 	public void paySalaries() {
-		for (Employee employee : employees){
+		for (Employee employee : employees) {
 			this.budget = this.budget - employee.getSalary();
 		}
-	}
-
-	public void populateTables() {
-
-	}
-
-	public void computeClientStatistics() {
-
-	}
-
-	public void payTraining(float amount) {
-
-	}
-
-	public void processOrder(Dish dish, Beverage beverage, Table table) {
-
 	}
 
 	public String getName() {
@@ -151,11 +130,11 @@ public class Restaurant {
 		return employees;
 	}
 
-	public void setMenu(java.util.List<MenuItem> menu) {
+	public void setMenu(List<MenuItem> menu) {
 		this.menu = menu;
 	}
 
-	public java.util.List<MenuItem> getMenu() {
+	public List<MenuItem> getMenu() {
 		return menu;
 	}
 
@@ -179,35 +158,33 @@ public class Restaurant {
 		return lst;
 	}
 
-
 	public void initRestaurant(BufferedReader input) throws IOException {
 		String resName = "", address = "", city = "";
 		try {
-			while (resName == ""){
+			while ("".equals(resName)) {
 				System.out.print("What is Restaurant's name: ");
 				resName = input.readLine();
 			}
 			this.name = resName;
 
-			while (address == ""){
+			while ("".equals(address)) {
 				System.out.print("What is Restaurant's address: ");
 				address = input.readLine();
 			}
 			this.address = address;
 
-			while (city == ""){
+			while ("".equals(city)) {
 				System.out.print("What is Restaurant's city: ");
 				city = input.readLine();
 			}
 			this.city = city;
 
 			this.visits = new ArrayList<>();
-		}
-		catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void initEmployees() {
 		List<Employee> employees = new ArrayList<>();
 		employees.add(new Waiter("Jim", "Parsons"));
@@ -227,44 +204,40 @@ public class Restaurant {
 		}
 		this.tables = tables;
 	}
-	
 
-	
 	public void initMenuItems(BufferedReader input) throws IOException {
 		List<MenuItem> menu = null;
 		while (true) {
 			try {
-				//TODO: possibly move to separate methods
+				// TODO: possibly move to separate methods
 				int highQualityDishNo, lowQualityDishNo;
-				while(true){
+				while (true) {
 					System.out.print("What is nr of High quality dishes: ");
 					highQualityDishNo = Integer.parseInt(input.readLine());
 
 					System.out.print("What is nr of Low quality dishes: ");
 					lowQualityDishNo = Integer.parseInt(input.readLine());
-					
-					if (highQualityDishNo + lowQualityDishNo != 5){
+
+					if (highQualityDishNo + lowQualityDishNo != 5) {
 						System.out.println("Number of high and low quality dishes must add up to 5.");
-					}
-					else {
+					} else {
 						this.highQualityDishNo = highQualityDishNo;
 						this.lowQualityDishNo = lowQualityDishNo;
 						break;
 					}
 				}
-				
+
 				int highQualityDishCost, lowQualityDishCost;
-				while(true){
+				while (true) {
 					System.out.print("What is the cost of High quality dishes: ");
 					highQualityDishCost = Integer.parseInt(input.readLine());
 
 					System.out.print("What is the cost of Low quality dishes: ");
 					lowQualityDishCost = Integer.parseInt(input.readLine());
-					
-					if (highQualityDishCost <= 0 || lowQualityDishCost <= 0){
+
+					if (highQualityDishCost <= 0 || lowQualityDishCost <= 0) {
 						System.out.println("Dish cost must be positive.");
-					}
-					else {
+					} else {
 						this.highQualityDishCost = highQualityDishCost;
 						this.lowQualityDishCost = lowQualityDishCost;
 						break;
@@ -272,41 +245,39 @@ public class Restaurant {
 				}
 
 				int highQualityBeverageNo, lowQualityBeverageNo;
-				while(true){
+				while (true) {
 					System.out.print("What is nr of High quality beverages: ");
 					highQualityBeverageNo = Integer.parseInt(input.readLine());
 
 					System.out.print("What is nr of Low quality beverages: ");
 					lowQualityBeverageNo = Integer.parseInt(input.readLine());
-					
-					if (highQualityBeverageNo + lowQualityBeverageNo != 5){
+
+					if (highQualityBeverageNo + lowQualityBeverageNo != 5) {
 						System.out.println("Number of high and low quality beverages must add up to 5.");
-					}
-					else {
+					} else {
 						this.highQualityBeverageNo = highQualityBeverageNo;
 						this.lowQualityBeverageNo = lowQualityBeverageNo;
 						break;
 					}
 				}
-				
+
 				int highQualityBeverageCost, lowQualityBeverageCost;
-				while(true){
+				while (true) {
 					System.out.print("What is the cost of High quality beverages: ");
 					highQualityBeverageCost = Integer.parseInt(input.readLine());
 
 					System.out.print("What is the cost of Low quality beverages: ");
 					lowQualityBeverageCost = Integer.parseInt(input.readLine());
-					
-					if (highQualityBeverageCost <= 0 || lowQualityBeverageCost <= 0){
+
+					if (highQualityBeverageCost <= 0 || lowQualityBeverageCost <= 0) {
 						System.out.println("Beverage cost must be positive.");
-					}
-					else {
+					} else {
 						this.highQualityBeverageCost = highQualityBeverageCost;
 						this.lowQualityBeverageCost = lowQualityBeverageCost;
 						break;
 					}
 				}
-							
+
 				menu = new ArrayList<>();
 				makeDishItems(highQualityDishCost, "High", highQualityDishNo, menu, true);
 				makeDishItems(lowQualityDishCost, "Low", lowQualityDishNo, menu, false);
@@ -320,8 +291,7 @@ public class Restaurant {
 
 		this.menu = menu;
 	}
-	
-	
+
 	private void makeDishItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
 		Random volumeAndCalories = new Random();
 		for (int i = 0; i < nrOfItems; i++) {
@@ -334,7 +304,7 @@ public class Restaurant {
 			menu.add(dish);
 		}
 	}
-	
+
 	private void makeBeverageItems(float cost, String namePrefix, Integer nrOfItems, List<MenuItem> menu, boolean isHighQuality) {
 		Random volumeAndCalories = new Random();
 		for (int i = 0; i < nrOfItems; i++) {

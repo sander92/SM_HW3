@@ -18,11 +18,6 @@ public abstract class Employee {
 		this.surname = surname;
 	}
 
-	public void increaseExperience() {
-
-	}
-
-
 	public String getName() {
 		return name;
 	}

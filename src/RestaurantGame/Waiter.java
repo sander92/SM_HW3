@@ -8,13 +8,13 @@ import RestaurantGame.enums.ExperienceLevel;
 
 public class Waiter extends Employee {
 
-	public Waiter(String name, String surname) {
+	public Waiter( String name, String surname ) {
 		super(name, surname);
 		setExperienceLevel(ExperienceLevel.LOW);
 	}
 
 	@Override
-	public float getSalary() {
+	public float getSalary( ) {
 		switch (getExperienceLevel()) {
 		default:
 		case LOW:
